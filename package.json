@@ -4,6 +4,7 @@
   "description": "Foodle Backend API",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Andreas Åkre Solberg <andreas.solberg@uninett.no>",
