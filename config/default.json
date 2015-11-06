@@ -1,0 +1,6 @@
+{
+	"db": "mongodb://localhost/foodle",
+	"feideconnect": {
+		"key": "..."
+	}
+}
