@@ -8,8 +8,8 @@ var
 
 
 var FeideConnectAPI = require('feideconnectapi').FeideConnectAPI;
-
 var app		= express();
+var env 	= process.argv[2] || process.env.NODE_ENV || 'production';
 
 var API 	= require('./lib/api/API').API;
 
@@ -20,10 +20,11 @@ var fc = new FeideConnectAPI({
 });
 
 
+app.set('json spaces', 2);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 3000;        // set our port
+var port = process.env.PORT || 3000; // set our port
 
 
 var A = new API(dbstr);
@@ -36,7 +37,14 @@ var fakeMiddleware = function(req, res, next) {
 	next();
 };
 
-app.use('/api', fc.cors(), fc.setup(), fc.policy({"requireUser": true}), A.getRoute());
+if (env === 'development') {
+	console.log("Running in development mode with fake authentication middleware...")
+	app.use('/api', fc.cors(), fakeMiddleware, fc.setup(), fc.policy({"requireUser": true}), A.getRoute());	
+} else {
+	app.use('/api', fc.cors(), fc.setup(), fc.policy({"requireUser": true}), A.getRoute());	
+}
+
+
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
